@@ -6,8 +6,10 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.pagelayout import PageLayout
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.graphics import *
+
+import send_sms
+import random
+import pandas as pd
 
 class UserInput(BoxLayout):
     def __init__(self, **kwargs):
@@ -17,30 +19,21 @@ class UserInput(BoxLayout):
         self.add_widget(self.text)
         self.stepCountInput = TextInput(multiline=False, size_hint=(1,.25))
         self.add_widget(self.stepCountInput)
-        # self.text.bind()
+        self.text.bind()
         self.stepCountInput.bind(on_text_validate=self.checkStepCount)
 
     def checkStepCount(self, instance):
-        # print(text)
-        if int(instance.text) < 2000:
-            self.text.text = "Uh oh! That was a poor decision..."
-        else:
-            self.text.text = "Gooooood~~"
+        if int(instance.text) < 5000:
+            send_sms.send_dumb_sms()
 
-class Punishments(RelativeLayout):
-    def __init__(self, **kwargs):
-        super(Punishments, self).__init__(**kwargs)
-        # self.pos = (-1,-1)
-        # self.size = (1000,1000)
-        with self.canvas:
-            Color(1., 0, 0)
-            Rectangle(pos=(10,10), size=(500,500))
+        elif int(instance.text) >= 5000:
+            self.text.text = "Good...You are spared for one more day..."
 
 class FlipPages(PageLayout):
     def __init__(self, **kwargs):
         super(FlipPages, self).__init__(**kwargs)
-        page1 = Punishments()
-        page2 = UserInput()
+        page1 = UserInput()
+        page2 = Label(text='ayy lmao')
 
         self.add_widget(page1)
         self.add_widget(page2)
