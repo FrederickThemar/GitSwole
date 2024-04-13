@@ -6,6 +6,8 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.pagelayout import PageLayout
+from kivy.uix.relativelayout import RelativeLayout
+# from kivy.graphics import *
 
 class UserInput(BoxLayout):
     def __init__(self, **kwargs):
@@ -22,6 +24,15 @@ class UserInput(BoxLayout):
         # print(text)
         if int(instance.text) < 2000:
             self.text.text = "Uh oh! That was a poor decision..."
+        else:
+            self.text.text = "Gooooood~~"
+
+# class Punishments(RelativeLayout):
+#     def __init__(self, **kwargs):
+#         super(Punishments, self).__init__(**kwargs)
+#     with self.canvas:
+#         Color(1., 0, 0)
+#         Rectangle(pos=(10,10), size=(500,500))
 
 class FlipPages(PageLayout):
     def __init__(self, **kwargs):
