@@ -6,10 +6,10 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.pagelayout import PageLayout
-from kivy.uix.relativelayout import RelativeLayout
-from kivy.graphics import *
-from kivy.graphics.transformation import Matrix
 
+import send_sms
+import random
+import pandas as pd
 
 class UserInput(BoxLayout):
     def __init__(self, **kwargs):
@@ -21,25 +21,14 @@ class UserInput(BoxLayout):
         self.add_widget(self.stepCountInput)
         self.text.bind()
         self.stepCountInput.bind(on_text_validate=self.checkStepCount)
-        self.missed = 0
 
     def checkStepCount(self, instance):
-        hotdog = ['hi', 'lo', 'deez', 'nuts']
-        if int(instance.text) < 2000:
-            # Use a lambda function inside the formatted string to output each item in the list hotdog along with its index followed by a new line
-            self.missed += 1
-            self.text.text = f"Uh oh! That was a poor decision. You have missed {self.missed} goals. \nNow you must choose...\n" + ''.join(map(lambda x: f'Message {x[0] + 1}: {x[1]}\n', enumerate(hotdog))) + "\nChoose a message to send, you naughty little slacker."
-        else:
-            self.text.text = "Gooooood~~"
+        if int(instance.text) < 5000:
+            self.text.text = "uh oh..."
+            send_sms.send_dumb_sms()
 
-class Punishments(RelativeLayout):
-    def __init__(self, **kwargs):
-        super(Punishments, self).__init__(**kwargs)
-        # self.pos = (-1,-1)
-        # self.size = (1000,1000)
-        with self.canvas:
-            Color(1., 0, 0)
-            Rectangle(pos=(10,10), size=(50,50))
+        elif int(instance.text) >= 5000:
+            self.text.text = "Good...You are spared for one more day..."
 
 class FlipPages(PageLayout):
     def __init__(self, **kwargs):
