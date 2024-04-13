@@ -8,9 +8,9 @@ def send_dumb_sms():
     mail=smtplib.SMTP('smtp.gmail.com', 587)
     mail.ehlo()
     mail.starttls()
-    sender='swolegit@gmail.com'
+    sender='harryplotter631@gmail.com'
     recipient='dashastepanova0731@gmail.com'
-    mail.login('swolegit@gmail.com','swolegit12345')
+    mail.login('harryplotter631@gmail.com','feob oycr eavg aogp')
     header='To:'+recipient+'\n'+'From:' \
     +sender+'\n'+'subject:testmail\n'
     content=header+content
