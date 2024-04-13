@@ -9,6 +9,7 @@ from kivy.uix.pagelayout import PageLayout
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.graphics import *
 from kivy.graphics.transformation import Matrix
+from kivy.core.window import Window
 
 
 class UserInput(BoxLayout):
@@ -37,15 +38,24 @@ class Punishments(RelativeLayout):
         super(Punishments, self).__init__(**kwargs)
         # self.pos = (-1,-1)
         # self.size = (1000,1000)
+        center_x = 0.5 * int(Window.size[0])
         with self.canvas:
+            # print(Window.size[0])
             Color(1., 0, 0)
-            Rectangle(pos=(10,10), size=(50,50))
+            # Rectangle(pos=(center_x+(75/1.5),15), size=(50,750))
+            Rectangle(pos=(center_x+(75/1.5),15), size=(50,150)) # Cover the circle
+            for i in range(UserInput.missed):
+                y = 15 + 150 + (i*60) # Calculate y value of rectangle
+                Rectangle(pos=(center_x+(75/1.5),y), size=(50,60))
+            Ellipse(3, pos=(center_x,10), size=(150,150))
+        # self.lv1 = Label(text="Lv1", pos=(100, 500))
+        # self.add_widget(self.lv1)
 
 class FlipPages(PageLayout):
     def __init__(self, **kwargs):
         super(FlipPages, self).__init__(**kwargs)
         page1 = UserInput()
-        page2 = Label(text='ayy lmao')
+        page2 = Punishments()
 
         self.add_widget(page1)
         self.add_widget(page2)
