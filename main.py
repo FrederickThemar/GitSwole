@@ -19,13 +19,16 @@ class UserInput(BoxLayout):
         self.add_widget(self.text)
         self.stepCountInput = TextInput(multiline=False, size_hint=(1,.25))
         self.add_widget(self.stepCountInput)
-        # self.text.bind()
+        self.text.bind()
         self.stepCountInput.bind(on_text_validate=self.checkStepCount)
+        self.missed = 0
 
     def checkStepCount(self, instance):
-        # print(text)
+        hotdog = ['hi', 'lo', 'deez', 'nuts']
         if int(instance.text) < 2000:
-            self.text.text = "Uh oh! That was a poor decision..."
+            # Use a lambda function inside the formatted string to output each item in the list hotdog along with its index followed by a new line
+            self.missed += 1
+            self.text.text = f"Uh oh! That was a poor decision. You have missed {self.missed} goals. \nNow you must choose...\n" + ''.join(map(lambda x: f'Message {x[0] + 1}: {x[1]}\n', enumerate(hotdog))) + "\nChoose a message to send, you naughty little slacker."
         else:
             self.text.text = "Gooooood~~"
 
@@ -41,8 +44,8 @@ class Punishments(RelativeLayout):
 class FlipPages(PageLayout):
     def __init__(self, **kwargs):
         super(FlipPages, self).__init__(**kwargs)
-        page1 = Punishments()
-        page2 = UserInput()
+        page1 = UserInput()
+        page2 = Label(text='ayy lmao')
 
         self.add_widget(page1)
         self.add_widget(page2)
