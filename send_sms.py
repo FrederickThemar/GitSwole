@@ -20,3 +20,9 @@ def get_random_msg():
     num = random.randint(0, len(file) - 1)
     random_msg = file.iloc[num, 0]
     return random_msg
+
+def get_specific_msg(msg):
+    file = pd.read_excel("bad_messages.xlsx")
+    num = random.randint(0, len(file) - 1)
+    random_msg = file.iloc[num, 0]
+    return random_msg

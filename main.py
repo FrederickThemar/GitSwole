@@ -11,10 +11,25 @@ from kivy.graphics import *
 from kivy.graphics.transformation import Matrix
 from kivy.core.window import Window
 from kivy.clock import Clock
+import smtplib
+import pandas as pd
+import random
+
+def send_dumb_sms(msg):
+    content=msg
+
+    mail=smtplib.SMTP('smtp.gmail.com', 587)
+    mail.ehlo()
+    mail.starttls()
+    sender='harryplotter631@gmail.com'
+    recipient='4794097853@tmomail.net'
+    mail.login('harryplotter631@gmail.com','feob oycr eavg aogp')
+    mail.sendmail(sender, recipient, content)
+    mail.close()
 
 
 class UserInput(BoxLayout):
-
+    missed = 0
     def __init__(self, **kwargs):
         super(UserInput, self).__init__(**kwargs)
         self.orientation = 'vertical'
@@ -24,7 +39,7 @@ class UserInput(BoxLayout):
         self.add_widget(self.getInput)
         self.text.bind()
         self.getInput.bind(on_text_validate=self.checkStepCount)
-        self.missed = 0
+        # self.missed = 0
         self.messageList = []
         self.messageDict = {
             1: ["would you be interested in learing more about the church of scientology?\nhttps://www.scientology.org/",
@@ -41,7 +56,7 @@ class UserInput(BoxLayout):
 
             3: ["I think you left your shirt at my house lat night...",
                 "I think we should break up. You're kinda too much for me rn.",
-                "blood blood blood blood blood blood blood blood blood blood blood blood blood blood blood blood",
+                "I miss you daddy.",
                 "I want taylor swift to be my mommy.",
                 "Your face is stupid"],
 
@@ -49,22 +64,26 @@ class UserInput(BoxLayout):
                 "On the fields of mother's mercy, \nLiquifying the interior of my mind,\nMy body aches for you inside\nMy head like little chunks of lead.\n\nI hope you don't think differently of me now. Wanna grab dinner?",
                 "we should get back together.",
                 "your parents should have gotten a divorce.",
-                "Hi baby girl hehe. Everything's okay, I promise. I forgive you. It's okay, don't worry about it. \nEverything's gonna be okay. I love you. I love you so much. \nI love you more than there are grains of sand, on every beach, of every planet, of every galaxy of the universe. \nI-I need you in my life. I need you more than humans need water, and food to survive. \nYou mean more to me than - home depot means to Mr Ladrado. You mean more to me than just anything. \nYou mean more to me than gold and diamonds, mean to the greediest burglar. \nAnd you're just the most perfect, most beautiful girl in all of the world, and I love you so much. \nI hope you enjoy watching this, baby girl kiss, hehe. See you at school tomorrow baby girl. \nI love you raises eyebrows, hehe. I do, it's true. I love you more than anything else in the world hehehe. \nBye baby girl. Stay perfect. Just for me."],
+                "Hi baby girl hehe. Everything's okay, I promise. I forgive you. It's okay, don't worry about it. \nEverything's gonna be okay. I love you. I love you so much. \nI love you more than there are grains of sand, on every beach, of every planet, of every galaxy of the universe... "],
 
-            5: ["I miss you daddy.",
-                "I think you've put on some weight...",
-                "hey, i know its been a long time but i cant get you off my mind. i think of you with insatiable appetite. i have written you the following poem:\n\nIn the darkness of my soul, you lingered like a fart,\nA stench so foul, you left a permanent mark.\nYour love was like a poison, seeping through my veins,\nLeaving scars and memories, driving me insane.\n\nYou were a succubus, draining all my energy,\nLeaving me with nothing but despair and agony.\nYour kisses tasted like expired cheese,\nYour touch felt like a swarm of disease.\n\nYour lies were like cheap perfume, suffocating me,\nYour deceitful eyes, oh how they deceived me.\nBut I was blind, blinded by lust and desire,\nNow I see you for what you are, a burning dumpster fire.\n\nSo go ahead, with your wicked ways,\nBut know that I've escaped your toxic maze.\nI'll rise from the ashes, stronger than before,\nLeaving you behind, like a dirty old naughty girl/boy.\n\nI hope you still think of me fondly.",
-                "Hey, do you have an extra pair of underwear I could borrow? Asking for a friend...",
-                "I despise your life."]
+            5: ["blood blood blood blood blood blood blood blood blood blood blood blood blood blood blood blood",
+                "I think you've put on some weight.",
+                "I still love you.",
+                "Wanna come overrr? xoxo i miss you",
+                "I'm pregnant. It's yours."]
         }
         
 
     def checkStepCount(self, instance):
         try: 
             if int(instance.text) < 2000:
-                self.missed += 1
-                self.messageList = self.messageDict[self.missed]
-                self.text.text = f"Uh oh! That was a poor decision. You have missed {self.missed} goals. \nNow you must choose...\n\n" + ''.join(map(lambda x: f'{x[0] + 1}: \"{x[1]}\"\n\n', enumerate(self.messageList))) + "\nChoose a message to send, you naughty little slacker."
+                UserInput.missed += 1
+                # self.missed += 1
+                if UserInput.missed > 5:
+                    # self.missed = 5
+                    UserInput.missed = 5
+                self.messageList = self.messageDict[UserInput.missed]
+                self.text.text = f"Uh oh! That was a poor decision. You have missed {UserInput.missed} goals. \nNow you must choose...\n\n" + ''.join(map(lambda x: f'{x[0] + 1}: \"{x[1]}\"\n\n', enumerate(self.messageList))) + "\nChoose a message to send, you naughty little slacker."
                 self.getInput.text = ""  # Reset the input text box
                 self.getInput.unbind(on_text_validate=self.checkStepCount)
                 self.getInput.bind(on_text_validate=self.getMessageIndex)
@@ -82,7 +101,8 @@ class UserInput(BoxLayout):
             message_index = int(instance.text)
             if 1 <= message_index <= len(self.messageList):
                 self.selectedMessageIndex = message_index - 1  # Store the selected index (adjusting to 0-based)
-                self.text.text = f"Sending \"{self.messageList[message_index-1]}\" to PHONENUMBER!!!\nHow many steps did you take today?" 
+                self.text.text = f"Sending \"{self.messageList[message_index-1]}\" to your ex!!!\nHow many steps did you take today?" 
+                send_dumb_sms(self.messageList[message_index-1])
                 self.getInput.text = ""
                 self.getInput.unbind(on_text_validate=self.getMessageIndex)
                 self.getInput.bind(on_text_validate=self.checkStepCount)
@@ -95,16 +115,13 @@ class UserInput(BoxLayout):
             self.text.text = "You gotta enter a number, you goofwad."
             self.getInput.text = ""
 
-
-
-    
-        hotdog = ['hi', 'lo', 'deez', 'nuts']
-        if int(instance.text) < 2000:
-            # Use a lambda function inside the formatted string to output each item in the list hotdog along with its index followed by a new line
-            UserInput.missed += 1
-            self.text.text = f"Uh oh! That was a poor decision. You have missed {self.missed} goals. \nNow you must choose...\n" + ''.join(map(lambda x: f'Message {x[0] + 1}: {x[1]}\n', enumerate(hotdog))) + "\nChoose a message to send, you naughty little slacker."
-        else:
-            self.text.text = "Gooooood~~"
+        # if int(instance.text) < 2000:
+        #     # Use a lambda function inside the formatted string to output each item in the list hotdog along with its index followed by a new line
+        #     UserInput.missed += 1
+        #     self.messageList = self.messageDict(UserInput.missed)
+        #     self.text.text = f"Uh oh! That was a poor decision. You have missed {self.missed} goals. \nNow you must choose...\n" + ''.join(map(lambda x: f'Message {x[0] + 1}: {x[1]}\n', enumerate(self.messageList))) + "\nChoose a message to send, you naughty little slacker."
+        # else:
+        #     self.text.text = "Gooooood~~"
 
 class Punishments(RelativeLayout):
     center_x = 0.5 * int(Window.size[0])
