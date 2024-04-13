@@ -8,6 +8,8 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.pagelayout import PageLayout
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.graphics import *
+from kivy.graphics.transformation import Matrix
+
 
 class UserInput(BoxLayout):
     def __init__(self, **kwargs):
@@ -34,7 +36,7 @@ class Punishments(RelativeLayout):
         # self.size = (1000,1000)
         with self.canvas:
             Color(1., 0, 0)
-            Rectangle(pos=(10,10), size=(500,500))
+            Rectangle(pos=(10,10), size=(50,50))
 
 class FlipPages(PageLayout):
     def __init__(self, **kwargs):
